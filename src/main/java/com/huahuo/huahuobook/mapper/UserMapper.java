@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.huahuo.huahuobook.pojo.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -17,7 +18,7 @@ import org.apache.ibatis.annotations.Select;
 public interface UserMapper extends BaseMapper<User> {
 
     @Select("select * from user where username = #{username}")
-    User selectByUsername(String username);
+    User selectByUsername(@Param("username") String username);
 }
 
 
