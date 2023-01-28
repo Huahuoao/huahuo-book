@@ -10,11 +10,11 @@ import lombok.Data;
 
 /**
  * 
- * @TableName user
+ * @TableName book
  */
-@TableName(value ="user")
+@TableName(value ="book")
 @Data
-public class User implements Serializable {
+public class Book implements Serializable {
     /**
      * 
      */
@@ -24,20 +24,8 @@ public class User implements Serializable {
     /**
      * 
      */
-    @TableField(value = "username")
-    private String username;
-
-    /**
-     * 
-     */
-    @TableField(value = "password")
-    private String password;
-
-    /**
-     * 
-     */
-    @TableField(value = "phone")
-    private String phone;
+    @TableField(value = "type")
+    private Integer type;
 
     /**
      * 
@@ -48,8 +36,20 @@ public class User implements Serializable {
     /**
      * 
      */
-    @TableField(value = "head_img")
-    private String headImg;
+    @TableField(value = "name")
+    private String name;
+
+    /**
+     * 
+     */
+    @TableField(value = "img")
+    private String img;
+
+    /**
+     * 
+     */
+    @TableField(value = "temp_code")
+    private String tempCode;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
@@ -65,13 +65,13 @@ public class User implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        User other = (User) that;
+        Book other = (Book) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getUsername() == null ? other.getUsername() == null : this.getUsername().equals(other.getUsername()))
-            && (this.getPassword() == null ? other.getPassword() == null : this.getPassword().equals(other.getPassword()))
-            && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
+            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getHeadImg() == null ? other.getHeadImg() == null : this.getHeadImg().equals(other.getHeadImg()));
+            && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
+            && (this.getImg() == null ? other.getImg() == null : this.getImg().equals(other.getImg()))
+            && (this.getTempCode() == null ? other.getTempCode() == null : this.getTempCode().equals(other.getTempCode()));
     }
 
     @Override
@@ -79,11 +79,11 @@ public class User implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getUsername() == null) ? 0 : getUsername().hashCode());
-        result = prime * result + ((getPassword() == null) ? 0 : getPassword().hashCode());
-        result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
+        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getHeadImg() == null) ? 0 : getHeadImg().hashCode());
+        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
+        result = prime * result + ((getImg() == null) ? 0 : getImg().hashCode());
+        result = prime * result + ((getTempCode() == null) ? 0 : getTempCode().hashCode());
         return result;
     }
 
@@ -94,11 +94,11 @@ public class User implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", username=").append(username);
-        sb.append(", password=").append(password);
-        sb.append(", phone=").append(phone);
+        sb.append(", type=").append(type);
         sb.append(", createTime=").append(createTime);
-        sb.append(", headImg=").append(headImg);
+        sb.append(", name=").append(name);
+        sb.append(", img=").append(img);
+        sb.append(", tempCode=").append(tempCode);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

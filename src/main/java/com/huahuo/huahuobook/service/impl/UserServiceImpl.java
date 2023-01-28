@@ -64,7 +64,7 @@ UserMapper userMapper;
         realUser.setUsername(user.getUsername());
         String pwd = DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
         realUser.setPassword(pwd);
-        realUser.setCreate_time(DateUtil.now());
+        realUser.setCreateTime(DateUtil.now());
         realUser.setPhone(user.getPhone());
         save(realUser);
         return ResponseResult.okResult(200,"注册成功");

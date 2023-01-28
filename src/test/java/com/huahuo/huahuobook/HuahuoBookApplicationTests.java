@@ -8,6 +8,7 @@ class HuahuoBookApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println( String.valueOf((int)((Math.random()*9+1)*100000)));
 	}
 
 }

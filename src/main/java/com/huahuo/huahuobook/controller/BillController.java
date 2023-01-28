@@ -1,9 +1,13 @@
 package com.huahuo.huahuobook.controller;
 
 import com.huahuo.huahuobook.common.ResponseResult;
+import com.huahuo.huahuobook.dto.BillDto;
+import com.huahuo.huahuobook.dto.BillPageDto;
 import com.huahuo.huahuobook.pojo.Bill;
 import com.huahuo.huahuobook.service.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class BillController {
     @Autowired
     BillService billService;
-    public ResponseResult<String> add(Bill bill){
+
+    @PostMapping("/add")
+    public ResponseResult<String> add(@RequestBody BillDto bill) {
         return billService.add(bill);
+    }
+
+    @PostMapping("/list/book")
+    public ResponseResult listBillByBook(@RequestBody BillPageDto billPageDto) {
+        return billService.listBillByBook(billPageDto);
     }
 }

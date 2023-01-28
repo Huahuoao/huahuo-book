@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 /**
@@ -36,19 +37,31 @@ public class Bill implements Serializable {
      * 
      */
     @TableField(value = "type_one")
-    private Integer type_one;
+    private Integer typeOne;
 
     /**
      * 
      */
     @TableField(value = "type_two")
-    private Integer type_two;
+    private Integer typeTwo;
 
     /**
      * 
      */
     @TableField(value = "text")
     private String text;
+
+    /**
+     * 
+     */
+    @TableField(value = "book_id")
+    private Integer bookId;
+
+    /**
+     * 
+     */
+    @TableField(value = "create_time")
+    private String createTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
@@ -68,9 +81,11 @@ public class Bill implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getNum() == null ? other.getNum() == null : this.getNum().equals(other.getNum()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-            && (this.getType_one() == null ? other.getType_one() == null : this.getType_one().equals(other.getType_one()))
-            && (this.getType_two() == null ? other.getType_two() == null : this.getType_two().equals(other.getType_two()))
-            && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()));
+            && (this.getTypeOne() == null ? other.getTypeOne() == null : this.getTypeOne().equals(other.getTypeOne()))
+            && (this.getTypeTwo() == null ? other.getTypeTwo() == null : this.getTypeTwo().equals(other.getTypeTwo()))
+            && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
+            && (this.getBookId() == null ? other.getBookId() == null : this.getBookId().equals(other.getBookId()))
+            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
     }
 
     @Override
@@ -80,9 +95,11 @@ public class Bill implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getNum() == null) ? 0 : getNum().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-        result = prime * result + ((getType_one() == null) ? 0 : getType_one().hashCode());
-        result = prime * result + ((getType_two() == null) ? 0 : getType_two().hashCode());
+        result = prime * result + ((getTypeOne() == null) ? 0 : getTypeOne().hashCode());
+        result = prime * result + ((getTypeTwo() == null) ? 0 : getTypeTwo().hashCode());
         result = prime * result + ((getText() == null) ? 0 : getText().hashCode());
+        result = prime * result + ((getBookId() == null) ? 0 : getBookId().hashCode());
+        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         return result;
     }
 
@@ -95,9 +112,11 @@ public class Bill implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", num=").append(num);
         sb.append(", name=").append(name);
-        sb.append(", type_one=").append(type_one);
-        sb.append(", type_two=").append(type_two);
+        sb.append(", typeOne=").append(typeOne);
+        sb.append(", typeTwo=").append(typeTwo);
         sb.append(", text=").append(text);
+        sb.append(", bookId=").append(bookId);
+        sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
