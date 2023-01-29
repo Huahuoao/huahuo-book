@@ -2,6 +2,11 @@ package com.huahuo.huahuobook.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.hash.Hash;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.excel.write.metadata.style.WriteCellStyle;
+import com.alibaba.excel.write.metadata.style.WriteFont;
+import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
@@ -10,17 +15,23 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huahuo.huahuobook.common.ResponseResult;
 import com.huahuo.huahuobook.dto.BookDto;
 import com.huahuo.huahuobook.dto.BookPageDto;
+import com.huahuo.huahuobook.dto.ListBookDto;
 import com.huahuo.huahuobook.dto.TempBookDto;
 import com.huahuo.huahuobook.mapper.RelationMapper;
 import com.huahuo.huahuobook.pojo.Bill;
 import com.huahuo.huahuobook.pojo.Book;
 import com.huahuo.huahuobook.pojo.Relation;
+import com.huahuo.huahuobook.service.BillService;
 import com.huahuo.huahuobook.service.BookService;
 import com.huahuo.huahuobook.mapper.BookMapper;
 import com.huahuo.huahuobook.service.RelationService;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +53,8 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
     private BookService bookService;
     @Autowired
     private BookMapper bookMapper;
+    @Autowired
+    private BillService billService;
 
     @Override
     public ResponseResult<String> createNewBook(BookDto bookDto) {
@@ -59,14 +72,17 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
     }
 
     @Override
-    public ResponseResult listBooks(Integer userId) {
+    public ResponseResult listBooks(ListBookDto dto) {
         List<Integer> ids = new ArrayList<>();
-        List<Relation> relations = relationMapper.listBook_idByUser_id(userId);
+        List<Relation> relations = relationMapper.listBook_idByUser_id(dto.getUserId());
         for (Relation relation : relations) {
             ids.add(relation.getBookId());
         }
-        List<Book> books = listByIds(ids);
-        return ResponseResult.okResult(books);
+        LambdaQueryWrapper<Book> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Book::getId, ids)
+                .eq(Book::getType, dto.getType());
+        List<Book> list = list(queryWrapper);
+        return ResponseResult.okResult(list);
     }
 
     @Override
@@ -89,6 +105,47 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
         relation.setUserId(dto.getUserId());
         relationService.save(relation);
         return ResponseResult.okResult("添加成功");
+    }
+
+    @Override
+    public ResponseResult<String> deleteBook(Integer id) {
+        LambdaQueryWrapper<Relation> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Relation::getBookId, id);
+        relationService.remove(queryWrapper);
+        bookService.removeById(id);
+        return ResponseResult.okResult("账本删除成功");
+    }
+
+    @Override
+    public void createExcel(Integer id, HttpServletResponse response) throws IOException {
+        LambdaQueryWrapper<Bill> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Bill::getBookId,id)
+                .orderByDesc(Bill::getCreateTime);
+        Book book = bookService.getById(id);
+        List<Bill> list = billService.list();
+        WriteCellStyle headWriteCellStyle = new WriteCellStyle();
+        WriteFont headWriteFont = new WriteFont();
+        headWriteFont.setFontHeightInPoints((short)13);
+        headWriteFont.setBold(true);
+        headWriteCellStyle.setWriteFont(headWriteFont);
+        //设置头居中
+        headWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+        //内容策略
+        WriteCellStyle contentWriteCellStyle = new WriteCellStyle();
+        //设置 水平居中
+        contentWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+        HorizontalCellStyleStrategy horizontalCellStyleStrategy = new HorizontalCellStyleStrategy(headWriteCellStyle, contentWriteCellStyle);
+
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码
+        String excelName = URLEncoder.encode(book.getName(), "UTF-8");
+        response.setHeader("Content-disposition", "attachment;filename=" + excelName + ExcelTypeEnum.XLSX.getValue());
+        EasyExcel.write(response.getOutputStream(), Bill.class).registerWriteHandler(horizontalCellStyleStrategy)
+                .sheet(book.getName())
+                .doWrite(list);  //list就是存储的数据
     }
 }
 
