@@ -38,7 +38,7 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill>
         LambdaQueryWrapper<Bill> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Bill::getBookId, billPageDto.getBookId());
         lambdaQueryWrapper.orderByDesc(Bill::getCreateTime);
-        IPage pageResult = page(page, lambdaQueryWrapper);
+        IPage pageResult = page(page,lambdaQueryWrapper);
         ResponseResult responseResult = new PageResponseResult(billPageDto.getPage(), billPageDto.getSize(), (int) page.getTotal());
         responseResult.setData(pageResult.getRecords());
         return responseResult;

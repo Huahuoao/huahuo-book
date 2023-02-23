@@ -12,6 +12,7 @@ import com.qiniu.storage.Configuration;
 import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
+import lombok.extern.slf4j.Slf4j;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.UUID;
 
 @Service
 @Transactional
+@Slf4j
 public class QiniuServiceImpl implements QiniuService {
     private static final Logger logger = LoggerFactory.getLogger(QiniuServiceImpl.class);
 
@@ -65,17 +67,17 @@ public class QiniuServiceImpl implements QiniuService {
             String fileName = UUID.randomUUID().toString().replaceAll("-", "") + "." + fileExt;
             // 调用put方法上传
             Response res = uploadManager.put(file.getBytes(), fileName, getUpToken());
+
             // 打印返回的信息
             if (res.isOK() && res.isJson()) {
                 // 返回这张存储照片的地址
                 return "http://"+QINIU_IMAGE_DOMAIN + JSONObject.parseObject(res.bodyString()).get("key");
             } else {
-
-                return null;
+                return "http://"+QINIU_IMAGE_DOMAIN + JSONObject.parseObject(res.bodyString()).get("key");
             }
         } catch (QiniuException e) {
             // 请求失败时打印的异常的信息
-            return null;
+            return "上传失败";
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }

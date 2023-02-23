@@ -31,9 +31,9 @@ UserMapper userMapper;
     @Override
     public ResponseResult<String> login(User user) {
         User realUser = userMapper.selectByUsername(user.getUsername());
-        Integer id = realUser.getId();
-        if(realUser!=null) //用户名存在
-        {
+        if(realUser==null)
+            return ResponseResult.errorResult(301,"用户未注册");
+           Integer id = realUser.getId();
           if(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()).equals(realUser.getPassword())) //密码正确。生成token 返回
           {
               Map<String,Object> map = new HashMap<String,Object>();
@@ -50,9 +50,9 @@ UserMapper userMapper;
               return ResponseResult.errorResult(401,"token不存在");
           }
           return ResponseResult.errorResult(302,"密码错误");
-        }
 
-            return ResponseResult.errorResult(301,"用户未注册");
+
+
     }
 
     @Override

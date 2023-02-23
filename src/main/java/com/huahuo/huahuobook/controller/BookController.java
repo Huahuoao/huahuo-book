@@ -1,29 +1,21 @@
 package com.huahuo.huahuobook.controller;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.support.ExcelTypeEnum;
-import com.alibaba.excel.write.metadata.style.WriteCellStyle;
-import com.alibaba.excel.write.metadata.style.WriteFont;
-import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+
 import com.huahuo.huahuobook.common.ResponseResult;
 import com.huahuo.huahuobook.dto.BookDto;
 import com.huahuo.huahuobook.dto.ListBookDto;
 import com.huahuo.huahuobook.dto.ShareBookDto;
 import com.huahuo.huahuobook.dto.TempBookDto;
-import com.huahuo.huahuobook.pojo.Bill;
-import com.huahuo.huahuobook.pojo.Book;
+
 import com.huahuo.huahuobook.service.BookService;
 import com.huahuo.huahuobook.service.FriendService;
-import io.swagger.models.auth.In;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.List;
+
 
 /**
  * @作者 花火
@@ -60,7 +52,11 @@ public class BookController {
         return bookService.listBooks(dto);
     }
 
-    //与好友共享账本
+    /**
+     *  分享账本
+     * @param dto
+     * @return
+     */
     @PostMapping("/share/1")
     public ResponseResult<String> shareBookWithFriend(@RequestBody ShareBookDto dto) {
 
@@ -81,18 +77,18 @@ public class BookController {
     }
 
     //通过临时码加入账本
-    @GetMapping("/add/temp")
+    @PostMapping("/add/temp")
     public ResponseResult addTempBook(@RequestBody TempBookDto dto) {
-        return null;
+        return bookService.addTempBook(dto);
     }
 
-
+//删除账本
     @GetMapping("/delete/{id}")
     public ResponseResult<String> deleteBook(@PathVariable Integer id) {
         return bookService.deleteBook(id);
     }
 
-
+//导出账本excel
     @GetMapping("/create/excel/{id}")
     public void createExcel(@PathVariable Integer id, HttpServletResponse response) throws IOException {
           bookService.createExcel(id,response);
