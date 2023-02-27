@@ -47,7 +47,7 @@ public class BookController {
      * @param dto
      * @return
      */
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseResult listBooks(@RequestBody ListBookDto dto) {
         return bookService.listBooks(dto);
     }

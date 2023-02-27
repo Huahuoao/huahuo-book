@@ -12,6 +12,7 @@ import com.huahuo.huahuobook.pojo.Bill;
 import com.huahuo.huahuobook.service.BillService;
 import com.huahuo.huahuobook.mapper.BillMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,7 +29,7 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill>
     public ResponseResult<String> add(BillDto bill) {
         log.info(bill.toString());
         save(bill);
-        return ResponseResult.okResult("保存成功");
+        return ResponseResult.okResult(bill.getId());
     }
 
     @Override
@@ -38,7 +39,30 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill>
         LambdaQueryWrapper<Bill> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Bill::getBookId, billPageDto.getBookId());
         lambdaQueryWrapper.orderByDesc(Bill::getCreateTime);
-        IPage pageResult = page(page,lambdaQueryWrapper);
+        if(billPageDto.getTypeTwo()!=0)
+        {
+            lambdaQueryWrapper.eq(Bill::getTypeTwo,billPageDto.getTypeTwo());
+        }
+        if(billPageDto.getTypeOne()!=0)
+        {
+            lambdaQueryWrapper.eq(Bill::getTypeOne,billPageDto.getTypeOne());
+        }
+        // 关键词
+        if (StringUtils.isNotBlank(billPageDto.getKeyword())) {
+            lambdaQueryWrapper.like(Bill::getText,billPageDto.getKeyword());
+        }
+
+        //俩时间之间
+        if(StringUtils.isNotBlank(billPageDto.getBeginTime()))
+        {
+            lambdaQueryWrapper.between(Bill::getCreateTime,billPageDto.getBeginTime(),billPageDto.getEndTime());
+        }
+        //
+        if(billPageDto.getIsCollect()==1)
+        {
+            lambdaQueryWrapper.eq(Bill::getIsCollect,1);
+        }
+        IPage pageResult = page(page, lambdaQueryWrapper);
         ResponseResult responseResult = new PageResponseResult(billPageDto.getPage(), billPageDto.getSize(), (int) page.getTotal());
         responseResult.setData(pageResult.getRecords());
         return responseResult;

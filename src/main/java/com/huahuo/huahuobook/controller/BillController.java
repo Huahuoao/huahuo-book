@@ -1,15 +1,17 @@
 package com.huahuo.huahuobook.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.huahuo.huahuobook.common.ResponseResult;
 import com.huahuo.huahuobook.dto.BillDto;
 import com.huahuo.huahuobook.dto.BillPageDto;
 import com.huahuo.huahuobook.pojo.Bill;
+import com.huahuo.huahuobook.pojo.Img;
 import com.huahuo.huahuobook.service.BillService;
+import com.huahuo.huahuobook.service.ImgService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @作者 花火
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class BillController {
     @Autowired
     BillService billService;
+    @Autowired
+    ImgService imgService;
 
     @PostMapping("/add")
     public ResponseResult<String> add(@RequestBody BillDto bill) {
@@ -31,6 +35,14 @@ public class BillController {
         return billService.listBillByBook(billPageDto);
     }
 
+    @GetMapping("/get/img/{id}")
+    public ResponseResult getImgUrls(@PathVariable Integer id) {
+        LambdaQueryWrapper<Img> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Img::getBillId,id);
+        List<Img> list = imgService.list(queryWrapper);
+        return ResponseResult.okResult(list);
 
-    //条件返回（俩时间之内）
+    }
+
+
 }

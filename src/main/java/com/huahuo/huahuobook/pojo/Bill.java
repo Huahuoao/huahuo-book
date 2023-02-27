@@ -28,13 +28,14 @@ public class Bill implements Serializable {
     private Double num;
 
     /**
-     * 
+     * 1 支出
+2 收入
      */
     @TableField(value = "type_one")
     private Integer typeOne;
 
     /**
-     * 
+     * 1餐饮 2出行 3娱乐 4学习 5日用品 6其他
      */
     @TableField(value = "type_two")
     private Integer typeTwo;
@@ -56,12 +57,6 @@ public class Bill implements Serializable {
      */
     @TableField(value = "create_time")
     private String createTime;
-
-    /**
-     * 
-     */
-    @TableField(value = "img")
-    private String img;
 
     /**
      * 
@@ -91,7 +86,6 @@ public class Bill implements Serializable {
             && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
             && (this.getBookId() == null ? other.getBookId() == null : this.getBookId().equals(other.getBookId()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getImg() == null ? other.getImg() == null : this.getImg().equals(other.getImg()))
             && (this.getIsCollect() == null ? other.getIsCollect() == null : this.getIsCollect().equals(other.getIsCollect()));
     }
 
@@ -106,7 +100,6 @@ public class Bill implements Serializable {
         result = prime * result + ((getText() == null) ? 0 : getText().hashCode());
         result = prime * result + ((getBookId() == null) ? 0 : getBookId().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getImg() == null) ? 0 : getImg().hashCode());
         result = prime * result + ((getIsCollect() == null) ? 0 : getIsCollect().hashCode());
         return result;
     }
@@ -124,7 +117,6 @@ public class Bill implements Serializable {
         sb.append(", text=").append(text);
         sb.append(", bookId=").append(bookId);
         sb.append(", createTime=").append(createTime);
-        sb.append(", img=").append(img);
         sb.append(", isCollect=").append(isCollect);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

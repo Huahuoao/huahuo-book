@@ -1,6 +1,9 @@
 package com.huahuo.huahuobook.controller;
 
 import cn.hutool.core.util.ZipUtil;
+import com.huahuo.huahuobook.common.ResponseResult;
+import com.huahuo.huahuobook.pojo.Img;
+import com.huahuo.huahuobook.service.ImgService;
 import com.huahuo.huahuobook.service.QiniuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +28,16 @@ import java.util.List;
 public class CommonController {
     @Autowired
     private QiniuService qiniuService;
-    @PostMapping("/upload/img")
-     public String uploadImg(@RequestParam("file") MultipartFile file ){
-        return qiniuService.saveImage(file);
+    @Autowired
+    private ImgService imgService;
+    @PostMapping("/upload/img") //先调用新建账单接口 获得id，再调用这个。
+     public ResponseResult uploadImg(@RequestParam("file") MultipartFile file, @RequestParam Integer id ){
+        String url =  qiniuService.saveImage(file);
+        Img img  = new Img();
+        img.setUrl(url);
+        img.setBillId(id);
+        imgService.save(img);
+        return ResponseResult.okResult("上传图片成功");
     }
 
     private static InputStream getImageStream(String url) {
