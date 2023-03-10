@@ -1,6 +1,8 @@
 package com.huahuo.huahuobook.service;
 
 import com.huahuo.huahuobook.common.ResponseResult;
+import com.huahuo.huahuobook.dto.LoginDto;
+import com.huahuo.huahuobook.dto.RegisterDto;
 import com.huahuo.huahuobook.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 * @createDate 2023-01-23 23:54:55
 */
 public interface UserService extends IService<User> {
-    ResponseResult<String> login(@RequestBody User user);
-    public ResponseResult<String> register(@RequestBody User user);
+    ResponseResult<String> login(@RequestBody LoginDto dto);
+    public ResponseResult<String> register(@RequestBody RegisterDto registerDto);
 }

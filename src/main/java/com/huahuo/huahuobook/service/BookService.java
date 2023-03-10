@@ -27,7 +27,7 @@ public interface BookService extends IService<Book> {
     public ResponseResult createTempBook(BookDto dto);
 
     public ResponseResult addTempBook(TempBookDto dto);
-
+    public ResponseResult updateBook(@RequestBody BookDto dto);
     public ResponseResult<String> deleteBook(Integer id);
 
     public void createExcel(@PathVariable Integer id, HttpServletResponse response) throws IOException;

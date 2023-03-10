@@ -32,7 +32,11 @@ public class Book implements Serializable {
      */
     @TableField(value = "create_time")
     private String createTime;
+    @TableField(value = "budget")
+    private Double budget;
 
+    @TableField(value = "balance")
+    private Double balance;
     /**
      * 
      */

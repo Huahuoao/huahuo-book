@@ -14,4 +14,7 @@ public class BookDto implements Serializable {
     Integer type;
     Integer userId;
     String name;
+    String img;
+    Double budget;
+    Integer id;
 }

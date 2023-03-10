@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 * @createDate 2023-01-25 17:59:33
 */
 public interface BillService extends IService<Bill> {
-    public ResponseResult<String> add(BillDto bill);
+    public ResponseResult<String> add(Bill bill);
     public ResponseResult listBillByBook(@RequestBody BillPageDto billPageDto);
+
+    ResponseResult updateBill(Bill bill);
 }

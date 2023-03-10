@@ -40,7 +40,7 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>
 
     @Override
     public ResponseResult<String> addFriend(AddFriendDto dto) {
-        User user = userMapper.selectByUsername(dto.getUsername());
+        User user = userMapper.selectByPhoneNumber(dto.getUsername());
         log.info("===================================000000");
         Integer id = user.getId();
         Friend friend = new Friend();

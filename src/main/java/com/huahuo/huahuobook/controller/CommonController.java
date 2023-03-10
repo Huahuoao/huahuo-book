@@ -2,6 +2,7 @@ package com.huahuo.huahuobook.controller;
 
 import cn.hutool.core.util.ZipUtil;
 import com.huahuo.huahuobook.common.ResponseResult;
+import com.huahuo.huahuobook.common.aop.LogAnnotation;
 import com.huahuo.huahuobook.pojo.Img;
 import com.huahuo.huahuobook.service.ImgService;
 import com.huahuo.huahuobook.service.QiniuService;
@@ -30,16 +31,24 @@ public class CommonController {
     private QiniuService qiniuService;
     @Autowired
     private ImgService imgService;
-    @PostMapping("/upload/img") //先调用新建账单接口 获得id，再调用这个。
-     public ResponseResult uploadImg(@RequestParam("file") MultipartFile file, @RequestParam Integer id ){
+    @PostMapping("/upload/img/bill") //先调用新建账单接口 获得id，再调用这个。
+    @LogAnnotation(module="common",operator="上传图片")
+     public ResponseResult uploadImg(@RequestParam("file") MultipartFile file, @RequestParam Integer id){
         String url =  qiniuService.saveImage(file);
         Img img  = new Img();
-        img.setUrl(url);
+        img.setSrc(url);
         img.setBillId(id);
         imgService.save(img);
         return ResponseResult.okResult("上传图片成功");
     }
 
+
+    @PostMapping("/upload/img") //先调用新建账单接口 获得id，再调用这个。
+    @LogAnnotation(module="common",operator="上传图片")
+    public ResponseResult uploadImgCommon(@RequestParam("file") MultipartFile file){
+        String url =  qiniuService.saveImage(file);
+        return ResponseResult.okResult(url);
+    }
     private static InputStream getImageStream(String url) {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();

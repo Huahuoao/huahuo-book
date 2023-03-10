@@ -50,6 +50,10 @@ public class ResponseResult<T> implements Serializable {
         ResponseResult result = new ResponseResult();
         return result.ok(code, null, msg);
     }
+    public static ResponseResult okResult(int code, Object data) {
+        ResponseResult result = new ResponseResult();
+        return result.ok(code, data);
+    }
 
     public static ResponseResult okResult(Object data) {
         ResponseResult result = setAppHttpCodeEnum(AppHttpCodeEnum.SUCCESS, AppHttpCodeEnum.SUCCESS.getErrorMessage());

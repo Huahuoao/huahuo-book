@@ -12,7 +12,7 @@ public class BillPageDto extends PageRequestDto {
     private Integer bookId;
     private String keyword; // 搜索关键字
     private Integer typeOne;
-    private Integer typeTwo;
+    private String typeTwo;
     private String beginTime;
     private String endTime;
     private Integer isCollect;

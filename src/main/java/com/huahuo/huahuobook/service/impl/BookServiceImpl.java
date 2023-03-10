@@ -25,6 +25,8 @@ import com.huahuo.huahuobook.service.BillService;
 import com.huahuo.huahuobook.service.BookService;
 import com.huahuo.huahuobook.mapper.BookMapper;
 import com.huahuo.huahuobook.service.RelationService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,7 @@ import java.util.Map;
  * @createDate 2023-01-27 17:35:12
  */
 @Service
+@Slf4j
 public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
         implements BookService {
     @Autowired
@@ -74,12 +77,14 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
     @Override
     public ResponseResult listBooks(ListBookDto dto) {
         List<Integer> ids = new ArrayList<>();
-        List<Relation> relations = relationMapper.listBook_idByUser_id(dto.getUserId());
+        List<Relation> relations = relationMapper.listBookIdByUserId(dto.getUserId());
+        log.info(relations.toString());
         for (Relation relation : relations) {
             ids.add(relation.getBookId());
         }
+        log.info(ids.toString());
         LambdaQueryWrapper<Book> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Book::getId, ids)
+        queryWrapper.in(Book::getId, ids)
                 .eq(Book::getType, dto.getType());
         List<Book> list = list(queryWrapper);
         return ResponseResult.okResult(list);
@@ -108,6 +113,40 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
     }
 
     @Override
+    public ResponseResult updateBook(BookDto dto) {
+        Integer id = dto.getId();
+        Book book = getById(id);
+        if (dto.getBudget() != null) {
+            if (book.getBalance() != null) {
+                Double cost = book.getBudget() - book.getBalance();
+                book.setBalance(dto.getBudget() - cost);
+                book.setBudget(dto.getBudget());
+
+
+            } else {
+                book.setBudget(dto.getBudget());
+                book.setBalance(dto.getBudget());
+                LambdaQueryWrapper<Bill> queryWrapper = new LambdaQueryWrapper<>();
+                queryWrapper.eq(Bill::getBookId, book.getId());
+                List<Bill> list = billService.list(queryWrapper);
+                for (Bill bill : list) {
+                    if (bill.getTypeOne() == 1) {
+                        book.setBalance(book.getBalance() - bill.getNum());
+                    } else if (bill.getTypeOne() == 2) {
+                        book.setBalance(book.getBalance() + bill.getNum());
+                    }
+                }
+            }
+        }
+        if (StringUtils.isNotBlank(dto.getImg()))
+            book.setImg(dto.getImg());
+        if (StringUtils.isNotBlank(dto.getName()))
+            book.setName(dto.getName());
+        updateById(book);
+        return ResponseResult.okResult("修改账本信息成功");
+    }
+
+    @Override
     public ResponseResult<String> deleteBook(Integer id) {
         LambdaQueryWrapper<Relation> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Relation::getBookId, id);
@@ -119,13 +158,13 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
     @Override
     public void createExcel(Integer id, HttpServletResponse response) throws IOException {
         LambdaQueryWrapper<Bill> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Bill::getBookId,id)
+        queryWrapper.eq(Bill::getBookId, id)
                 .orderByDesc(Bill::getCreateTime);
         Book book = bookService.getById(id);
         List<Bill> list = billService.list();
         WriteCellStyle headWriteCellStyle = new WriteCellStyle();
         WriteFont headWriteFont = new WriteFont();
-        headWriteFont.setFontHeightInPoints((short)13);
+        headWriteFont.setFontHeightInPoints((short) 13);
         headWriteFont.setBold(true);
         headWriteCellStyle.setWriteFont(headWriteFont);
         //设置头居中

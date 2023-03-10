@@ -2,9 +2,13 @@ package com.huahuo.huahuobook.controller;
 
 
 import com.huahuo.huahuobook.common.ResponseResult;
+import com.huahuo.huahuobook.common.aop.LogAnnotation;
+import com.huahuo.huahuobook.dto.LoginDto;
+import com.huahuo.huahuobook.dto.RegisterDto;
 import com.huahuo.huahuobook.pojo.User;
 import com.huahuo.huahuobook.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.ini4j.Reg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,14 +27,16 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/login")
-    public ResponseResult<String> login(@RequestBody User user) {
-        return userService.login(user);
+    @LogAnnotation(module="user",operator="登录")
+    public ResponseResult<String> login(@RequestBody LoginDto dto) {
+        return userService.login(dto);
     }
 
 
     @PostMapping("/register")
-    public ResponseResult<String> register(@RequestBody User user) {
+    @LogAnnotation(module="user",operator="注册")
+    public ResponseResult<String> register(@RequestBody RegisterDto dto) {
 
-        return userService.register(user);
+        return userService.register(dto);
     }
 }

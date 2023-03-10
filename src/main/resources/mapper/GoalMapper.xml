@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huahuo.huahuobook.mapper.GoalMapper">
+
+    <resultMap id="BaseResultMap" type="com.huahuo.huahuobook.pojo.Goal">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="goalNum" column="goal_num" jdbcType="DOUBLE"/>
+            <result property="nowNum" column="now_num" jdbcType="DOUBLE"/>
+            <result property="text" column="text" jdbcType="VARCHAR"/>
+            <result property="img" column="img" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="DATE"/>
+            <result property="endTime" column="end_time" jdbcType="DATE"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,goal_num,
+        now_num,text,img,
+        create_time,end_time
+    </sql>
+</mapper>

@@ -5,16 +5,16 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.Data;
 
 /**
  * 
- * @TableName bill
+ * @TableName goal
  */
-@TableName(value ="bill")
+@TableName(value ="goal")
 @Data
-public class Bill implements Serializable {
+public class Goal implements Serializable {
     /**
      * 
      */
@@ -24,21 +24,20 @@ public class Bill implements Serializable {
     /**
      * 
      */
-    @TableField(value = "num")
-    private Double num;
+    @TableField(value = "user_id")
+    private Integer userId;
 
     /**
-     * 1 支出
-2 收入
+     * 
      */
-    @TableField(value = "type_one")
-    private Integer typeOne;
+    @TableField(value = "goal_num")
+    private Double goalNum;
 
     /**
-     * 1餐饮 2出行 3娱乐 4学习 5日用品 6其他
+     * 
      */
-    @TableField(value = "type_two")
-    private String typeTwo;
+    @TableField(value = "now_num")
+    private Double nowNum;
 
     /**
      * 
@@ -49,20 +48,20 @@ public class Bill implements Serializable {
     /**
      * 
      */
-    @TableField(value = "book_id")
-    private Integer bookId;
+    @TableField(value = "img")
+    private String img;
 
     /**
      * 
      */
     @TableField(value = "create_time")
-    private String createTime;
+    private LocalDate createTime;
 
     /**
      * 
      */
-    @TableField(value = "is_collect")
-    private Integer isCollect;
+    @TableField(value = "end_time")
+    private LocalDate endTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
@@ -78,15 +77,15 @@ public class Bill implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        Bill other = (Bill) that;
+        Goal other = (Goal) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getNum() == null ? other.getNum() == null : this.getNum().equals(other.getNum()))
-            && (this.getTypeOne() == null ? other.getTypeOne() == null : this.getTypeOne().equals(other.getTypeOne()))
-            && (this.getTypeTwo() == null ? other.getTypeTwo() == null : this.getTypeTwo().equals(other.getTypeTwo()))
+            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+            && (this.getGoalNum() == null ? other.getGoalNum() == null : this.getGoalNum().equals(other.getGoalNum()))
+            && (this.getNowNum() == null ? other.getNowNum() == null : this.getNowNum().equals(other.getNowNum()))
             && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
-            && (this.getBookId() == null ? other.getBookId() == null : this.getBookId().equals(other.getBookId()))
+            && (this.getImg() == null ? other.getImg() == null : this.getImg().equals(other.getImg()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getIsCollect() == null ? other.getIsCollect() == null : this.getIsCollect().equals(other.getIsCollect()));
+            && (this.getEndTime() == null ? other.getEndTime() == null : this.getEndTime().equals(other.getEndTime()));
     }
 
     @Override
@@ -94,13 +93,13 @@ public class Bill implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getNum() == null) ? 0 : getNum().hashCode());
-        result = prime * result + ((getTypeOne() == null) ? 0 : getTypeOne().hashCode());
-        result = prime * result + ((getTypeTwo() == null) ? 0 : getTypeTwo().hashCode());
+        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
+        result = prime * result + ((getGoalNum() == null) ? 0 : getGoalNum().hashCode());
+        result = prime * result + ((getNowNum() == null) ? 0 : getNowNum().hashCode());
         result = prime * result + ((getText() == null) ? 0 : getText().hashCode());
-        result = prime * result + ((getBookId() == null) ? 0 : getBookId().hashCode());
+        result = prime * result + ((getImg() == null) ? 0 : getImg().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getIsCollect() == null) ? 0 : getIsCollect().hashCode());
+        result = prime * result + ((getEndTime() == null) ? 0 : getEndTime().hashCode());
         return result;
     }
 
@@ -111,13 +110,13 @@ public class Bill implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", num=").append(num);
-        sb.append(", typeOne=").append(typeOne);
-        sb.append(", typeTwo=").append(typeTwo);
+        sb.append(", userId=").append(userId);
+        sb.append(", goalNum=").append(goalNum);
+        sb.append(", nowNum=").append(nowNum);
         sb.append(", text=").append(text);
-        sb.append(", bookId=").append(bookId);
+        sb.append(", img=").append(img);
         sb.append(", createTime=").append(createTime);
-        sb.append(", isCollect=").append(isCollect);
+        sb.append(", endTime=").append(endTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

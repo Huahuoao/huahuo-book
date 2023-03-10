@@ -18,7 +18,8 @@ import java.util.List;
 @Mapper
 public interface RelationMapper extends BaseMapper<Relation> {
 
-    List<Relation> listBook_idByUser_id(@Param("user_id") Integer user_id);
+    @Select("select * from relation where user_id = #{userId}")
+    List<Relation> listBookIdByUserId(@Param("userId") Integer userId);
 
     }
 

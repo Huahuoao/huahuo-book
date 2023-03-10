@@ -1,6 +1,20 @@
 server:
   port: 51602
 spring:
+  rabbitmq:
+    host: 14.29.181.103
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        acknowledge-mode: auto
+      direct:
+        retry:
+          enabled: true
+          max-attempts: 5
+          initial-interval: 3000
+        default-requeue-rejected: false
   servlet:
     multipart:
       max-request-size: 500MB
@@ -13,10 +27,15 @@ spring:
       time-to-live: 1800000
   datasource:
     druid:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://14.29.181.103:3308/huahuo_book?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-      username: root
-      password: 20030416cjh
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://14.29.181.103:3308/huahuo_book?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+        username: root
+        password: 20030416cjh
+
+
+
+
+
 #
 #  redis:
 #    host: tycloud.fzuhuahuo.cn

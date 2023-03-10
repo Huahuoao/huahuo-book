@@ -5,6 +5,9 @@ import cn.hutool.core.io.unit.DataUnit;
 import cn.hutool.jwt.JWTUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huahuo.huahuobook.common.ResponseResult;
+import com.huahuo.huahuobook.dto.LoginDto;
+import com.huahuo.huahuobook.dto.RegisterDto;
+import com.huahuo.huahuobook.pojo.Goal;
 import com.huahuo.huahuobook.pojo.User;
 import com.huahuo.huahuobook.service.UserService;
 import com.huahuo.huahuobook.mapper.UserMapper;
@@ -18,58 +21,61 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
-* @author Administrator
-* @description 针对表【user】的数据库操作Service实现
-* @createDate 2023-01-23 23:54:55
-*/
+ * @author Administrator
+ * @description 针对表【user】的数据库操作Service实现
+ * @createDate 2023-01-23 23:54:55
+ */
 @Service
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
-    implements UserService{
-@Autowired
-UserMapper userMapper;
+        implements UserService {
+    @Autowired
+    UserMapper userMapper;
+
     @Override
-    public ResponseResult<String> login(User user) {
-        User realUser = userMapper.selectByUsername(user.getUsername());
-        if(realUser==null)
-            return ResponseResult.errorResult(301,"用户未注册");
-           Integer id = realUser.getId();
-          if(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()).equals(realUser.getPassword())) //密码正确。生成token 返回
-          {
-              Map<String,Object> map = new HashMap<String,Object>();
-              map.put("id",Integer.parseInt(realUser.getId().toString()));
-              map.put("expire_time",System.currentTimeMillis()+1000*60*60*24);
-              String token = JWTUtil.createToken(map,"huahuo".getBytes());
-              if(JWTUtil.verify(token,"huahuo".getBytes())){
-                  Map result = new HashMap();
-                  result.put("token",token);
-                  result.put("id",id);
-                  return ResponseResult.okResult(result);
+    public ResponseResult<String> login(LoginDto dto) {
+        User realUser = userMapper.selectByPhoneNumber(dto.getPhone());
+        Integer id = null;
+        if (realUser == null) {
+            realUser = new User();
+            realUser.setPhone(dto.getPhone());
+            save(realUser);
+            id = realUser.getId();
+            return ResponseResult.okResult(201, id); //做一半 ，注册没写
+        }
+        id = realUser.getId();
+        if (dto.getCode().equals("root")) //密码正确。生成token 返回
+        {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("id", Integer.parseInt(realUser.getId().toString()));
+            String token = JWTUtil.createToken(map, "huahuo".getBytes());
+            if (JWTUtil.verify(token, "huahuo".getBytes())) {
+                Map result = new HashMap();
+                result.put("token", token);
+                result.put("id", id);
+                return ResponseResult.okResult(result);
 
-              }
-              return ResponseResult.errorResult(401,"token不存在");
-          }
-          return ResponseResult.errorResult(302,"密码错误");
-
+            }
+            return ResponseResult.errorResult(401, "token不存在");
+        }
+        return ResponseResult.errorResult(302, "验证码错误");
 
 
     }
 
     @Override
-    public ResponseResult<String> register(User user) {
-        User realUser = new User();
-        User user1 = userMapper.selectByUsername(user.getUsername());
-        if(userMapper.selectByUsername(user.getUsername())==null)
-       {
-        realUser.setUsername(user.getUsername());
-        String pwd = DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
-        realUser.setPassword(pwd);
-        realUser.setCreateTime(DateUtil.now());
-        realUser.setPhone(user.getPhone());
-        save(realUser);
-        return ResponseResult.okResult(200,"注册成功");
-       }
-       return ResponseResult.errorResult(301,"用户已存在");
+    public ResponseResult<String> register(RegisterDto registerDto) {
+        User user = getById(registerDto.getUserId());
+        user.setNickName(registerDto.getNickName());
+        user.setAgeType(registerDto.getAgeType());
+        user.setHeadImg(registerDto.getHeadImg());
+        user.setCreateTime(DateUtil.now());
+        //目标暂时不接；//俩种一种直接传，一种选择的
+        updateById(user);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("id", Integer.parseInt(registerDto.getUserId().toString()));
+        String token = JWTUtil.createToken(map, "huahuo".getBytes());
+        return ResponseResult.okResult(token);
     }
 }
 
