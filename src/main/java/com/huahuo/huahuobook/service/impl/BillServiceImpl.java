@@ -1,5 +1,6 @@
 package com.huahuo.huahuobook.service.impl;
 
+import cn.hutool.core.lang.hash.Hash;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -16,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 
 /**
  * @author Administrator
@@ -42,7 +45,10 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill>
         }
         bookService.updateById(book);
         save(bill);
-        return ResponseResult.okResult(bill.getId());
+        HashMap map = new HashMap(2);
+        map.put("bill_id",bill.getId());
+        map.put("msg","添加账单成功");
+        return ResponseResult.okResult(map);
     }
 
     @Override
@@ -61,6 +67,10 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill>
         // 关键词
         if (StringUtils.isNotBlank(billPageDto.getKeyword())) {
             lambdaQueryWrapper.like(Bill::getText, billPageDto.getKeyword());
+        }
+        // 关键词
+        if (billPageDto.getPayWay()!=null) {
+            lambdaQueryWrapper.like(Bill::getPayWay, billPageDto.getPayWay());
         }
 
         //俩时间之间
@@ -99,6 +109,8 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill>
         realBill.setIsCollect(1);
         //改类型
         realBill.setTypeTwo(bill.getTypeTwo());
+        //改支付方式
+        realBill.setPayWay(bill.getPayWay());
         //保存一下
         bookService.updateById(book);
         updateById(realBill);

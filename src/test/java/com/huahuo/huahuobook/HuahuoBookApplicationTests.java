@@ -21,7 +21,7 @@ public class HuahuoBookApplicationTests {
     @Autowired
     BillService billService;
 
-    @Test
+    @Test   //生成数据
     public void createData() {
         int num = 50;
         Bill bill = new Bill();
@@ -52,6 +52,6 @@ public class HuahuoBookApplicationTests {
             billService.add(bill);
         }
 
-//        billService.saveBatch(bills);
+
     }
 }

@@ -33,7 +33,8 @@ public class Bill implements Serializable {
      */
     @TableField(value = "type_one")
     private Integer typeOne;
-
+    @TableField(value = "pay_way")
+    private Integer payWay;
     /**
      * 1餐饮 2出行 3娱乐 4学习 5日用品 6其他
      */

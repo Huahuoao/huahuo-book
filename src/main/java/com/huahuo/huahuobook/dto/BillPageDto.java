@@ -16,4 +16,5 @@ public class BillPageDto extends PageRequestDto {
     private String beginTime;
     private String endTime;
     private Integer isCollect;
+    private Integer payWay;
 }
