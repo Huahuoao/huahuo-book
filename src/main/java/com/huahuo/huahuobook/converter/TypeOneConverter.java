@@ -29,15 +29,15 @@ public class TypeOneConverter implements Converter<Integer> {
         //CellData转对象属性
         String cellStr = context.getReadCellData().getStringValue();
         if (StrUtil.isEmpty(cellStr)) return null;
-        if ("餐饮".equals(cellStr)) {
+        if ("支付宝".equals(cellStr)) {
             return 1;
-        } else if ("出行".equals(cellStr)) {
+        } else if ("微信".equals(cellStr)) {
             return 2;
         }
-        else if ("娱乐".equals(cellStr)) {
+        else if ("银行卡".equals(cellStr)) {
             return 3;
         }
-        else if ("学习".equals(cellStr)) {
+        else if ("现金".equals(cellStr)) {
             return 4;
         }
         else if ("日用品".equals(cellStr)) {
@@ -59,15 +59,15 @@ public class TypeOneConverter implements Converter<Integer> {
             return new WriteCellData<>("");
         }
         if (cellValue == 1) {
-            return new WriteCellData<>("餐饮");
+            return new WriteCellData<>("支付宝");
         } else if (cellValue == 2) {
-            return new WriteCellData<>("出行");
+            return new WriteCellData<>("微信");
         }
         else if (cellValue == 3) {
-            return new WriteCellData<>("娱乐");
+            return new WriteCellData<>("银行卡");
         }
         else if (cellValue == 4) {
-            return new WriteCellData<>("学习");
+            return new WriteCellData<>("现金");
         }
         else if (cellValue == 5) {
             return new WriteCellData<>("日用品");

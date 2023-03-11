@@ -23,12 +23,12 @@ public class HuahuoBookApplicationTests {
 
     @Test   //生成数据
     public void createData() {
-        int num = 50;
+        int num = 50;  //输入要生成数据条数
         Bill bill = new Bill();
         ArrayList<Bill> bills = new ArrayList<>();
         while (num != 0) {
             bill.setBookId(1);
-            bill.setText("测试数据");
+            bill.setText("这里是我的备注噢");
             num--;
             Random random = new Random();
             int minDay = (int) LocalDate.of(2022, 1, 1).toEpochDay();
@@ -40,6 +40,8 @@ public class HuahuoBookApplicationTests {
             Double num3 = num2.doubleValue();
             int type = nextInt(1, 3);
             int type2 = nextInt(0, 6);
+            int type5=nextInt(1,5);
+            bill.setPayWay(type5);
             String type3[] = new String[]{"餐饮", "出行", "娱乐", "学习", "日用品", "其他"};
             String type4 = type3[type2];
             bill.setTypeOne(type);

@@ -34,9 +34,9 @@ public class TypeTwoConverter implements Converter<Integer> {
         //CellData转对象属性
         String cellStr = context.getReadCellData().getStringValue();
         if (StrUtil.isEmpty(cellStr)) return null;
-        if ("个人消费".equals(cellStr)) {
+        if ("支出".equals(cellStr)) {
             return 1;
-        } else if ("团体消费".equals(cellStr)) {
+        } else if ("收入".equals(cellStr)) {
             return 2;
         } else {
             return null;
@@ -51,9 +51,9 @@ public class TypeTwoConverter implements Converter<Integer> {
             return new WriteCellData<>("");
         }
         if (cellValue == 1) {
-            return new WriteCellData<>("个人消费");
+            return new WriteCellData<>("支出");
         } else if (cellValue == 2) {
-            return new WriteCellData<>("团体消费");
+            return new WriteCellData<>("收入");
         } else {
             return new WriteCellData<>("");
         }

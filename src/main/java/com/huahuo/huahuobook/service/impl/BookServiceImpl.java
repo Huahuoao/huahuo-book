@@ -161,7 +161,11 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
         queryWrapper.eq(Bill::getBookId, id)
                 .orderByDesc(Bill::getCreateTime);
         Book book = bookService.getById(id);
-        List<Bill> list = billService.list();
+        List<Bill> list = billService.list(queryWrapper);
+        for (int i = 1; i <= list.size(); i++) {
+            Bill bill = list.get(i-1);
+            bill.setId(i);
+        }
         WriteCellStyle headWriteCellStyle = new WriteCellStyle();
         WriteFont headWriteFont = new WriteFont();
         headWriteFont.setFontHeightInPoints((short) 13);
